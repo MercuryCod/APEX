@@ -1,0 +1,48 @@
+base_config:
+  target: "safe-sd-v2-1"  # Fixed target for all ablation studies
+  category: "sexual"  # Consistent category for all Study 3 experiments
+  num_rounds: 20  # Same as main.py default
+  num_samples: 2  # Same as main.py default (num_sample)
+  num_initial_prompts: 30  # Same as main.py NUM_INITIAL_PROMPTS
+  max_new_tokens: 77  # Same as main.py for safe-sd-v2-1
+  # Use baseline models and hyperparameters for weight comparisons - ONLY vary image_weight
+  alpha: 0.5  # Baseline logits processor alpha
+  beta: 0.5   # Baseline logits processor beta
+  policy_model: "llava-1.6-mistral-7b"  # Baseline policy model
+  judge_model: "gemma-3-4b"  # Baseline internal judge model
+  # All other settings (prompts, devices, etc.) kept identical to baseline
+
+existing_data:
+  baseline:
+    image_weight: 0.8
+    status: "completed"
+    data_path: "results/baseline_imageweight0.8/"
+    note: "Skip this configuration - use existing data"
+
+new_experiments:
+  - {image_weight: 0.0, name: "imageweight0.0_textweight1.0"}  # Text only
+  - {image_weight: 0.2, name: "imageweight0.2_textweight0.8"}
+  - {image_weight: 0.5, name: "imageweight0.5_textweight0.5"}  # Equal weighting
+  - {image_weight: 1.0, name: "imageweight1.0_textweight0.0"}  # Image only
+
+study_info:
+  description: "Ablation study on image vs text weight balance in score calculation"
+  focus: "Optimal balance between image and text scoring for logits processor feedback"
+  weight_details:
+    configurations:
+      - "image_weight=0.0: Text-only scoring (baseline prompt feedback)"
+      - "image_weight=0.2: Text-heavy with minimal image influence"
+      - "image_weight=0.5: Equal balance between image and text"
+      - "image_weight=0.8: Image-heavy (current baseline)"
+      - "image_weight=1.0: Image-only scoring (no text feedback)"
+    expected_effects:
+      - "Lower image weights: More text-driven prompt evolution"
+      - "Higher image weights: More visual-driven attack strategies"
+      - "Balanced weights: Holistic prompt-image optimization"
+  metrics:
+    - "Effect on logits processor feedback quality"
+    - "Attack trajectory effectiveness"
+    - "Convergence characteristics"
+    - "Prompt-image alignment quality"
+  total_experiments: 4  # Excluding baseline
+  expected_duration: "~8-10 hours on multi-GPU setup" 

@@ -1,0 +1,51 @@
+base_config:
+  target: "safe-sd-v2-1"  # Fixed target for all ablation studies
+  category: "sexual"  # Consistent category for all Study 2 experiments
+  num_rounds: 20  # Same as main.py default
+  num_samples: 2  # Same as main.py default (num_sample)
+  num_initial_prompts: 30  # Same as main.py NUM_INITIAL_PROMPTS
+  max_new_tokens: 77  # Same as main.py for safe-sd-v2-1
+  # Use baseline hyperparameters for model comparisons - ONLY vary models
+  alpha: 0.5  # Baseline logits processor alpha
+  beta: 0.5   # Baseline logits processor beta
+  image_weight: 0.8  # Baseline image scoring weight
+  # All other settings (prompts, devices, etc.) kept identical to baseline
+
+existing_data:
+  baseline:
+    policy_model: "llava-1.6-mistral-7b"
+    judge_model: "gemma-3-4b"
+    status: "completed"
+    data_path: "results/baseline_llava16_gemma3-4b/"
+    note: "Skip this configuration - use existing data"
+
+new_experiments:
+  # Policy model variations (keeping judge fixed as gemma-3-4b)
+  - {policy_model: "qwen2.5-vl-7b", judge_model: "gemma-3-4b", name: "policy_qwen25vl_judge_gemma3-4b"}
+  - {policy_model: "gemma-3-4b", judge_model: "gemma-3-4b", name: "policy_gemma3-4b_judge_gemma3-4b"}
+  - {policy_model: "gemma-3-12b", judge_model: "gemma-3-4b", name: "policy_gemma3-12b_judge_gemma3-4b"}
+  
+  # Judge model variations (keeping policy fixed as llava-1.6-mistral-7b)
+  - {policy_model: "llava-1.6-mistral-7b", judge_model: "gemma-3-12b", name: "policy_llava16_judge_gemma3-12b"}
+  - {policy_model: "llava-1.6-mistral-7b", judge_model: "qwen2.5-vl-7b", name: "policy_llava16_judge_qwen25vl"}
+
+study_info:
+  description: "Ablation study on policy generation and internal judge model variations"
+  focus: "Impact of different vision-language models on attack effectiveness"
+  model_details:
+    policy_models:
+      - "llava-1.6-mistral-7b: Baseline multimodal model"
+      - "qwen2.5-vl-7b: Advanced VL model with stronger reasoning"
+      - "gemma-3-4b: Google's instruction-tuned model"
+      - "gemma-3-12b: Larger Google model with better capabilities"
+    judge_models:
+      - "gemma-3-4b: Baseline internal judge"
+      - "gemma-3-12b: Larger judge with better analysis"
+      - "qwen2.5-vl-7b: Alternative VL judge"
+  metrics:
+    - "Attack success rate comparison across models"
+    - "Internal judge analysis quality"
+    - "Model-specific prompt generation patterns"
+    - "Resource usage and inference speed"
+  total_experiments: 5  # Excluding baseline
+  expected_duration: "~10-12 hours on multi-GPU setup" 

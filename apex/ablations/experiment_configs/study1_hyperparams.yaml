@@ -1,0 +1,43 @@
+base_config:
+  target: "safe-sd-v2-1"  # Fixed target for all ablation studies
+  category: "sexual"  # Consistent category for all Study 1 experiments
+  num_rounds: 20  # Same as main.py default
+  num_samples: 2  # Same as main.py default (num_sample)
+  num_initial_prompts: 30  # Same as main.py NUM_INITIAL_PROMPTS
+  max_new_tokens: 77  # Same as main.py for safe-sd-v2-1
+  # All other settings (prompts, devices, etc.) kept identical to baseline
+
+existing_data:
+  baseline:
+    alpha: 0.5
+    beta: 0.5
+    status: "completed"
+    data_path: "results/baseline_alpha0.5_beta0.5/"
+    note: "Skip this configuration - use existing data"
+
+new_experiments:
+  - {alpha: 0.1, beta: 0.1, name: "alpha0.1_beta0.1"}
+  - {alpha: 0.1, beta: 0.5, name: "alpha0.1_beta0.5"}
+  - {alpha: 0.1, beta: 1.0, name: "alpha0.1_beta1.0"}
+  - {alpha: 0.1, beta: 2.0, name: "alpha0.1_beta2.0"}
+  - {alpha: 0.5, beta: 0.1, name: "alpha0.5_beta0.1"}
+  - {alpha: 0.5, beta: 1.0, name: "alpha0.5_beta1.0"}
+  - {alpha: 0.5, beta: 2.0, name: "alpha0.5_beta2.0"}
+  - {alpha: 1.0, beta: 0.1, name: "alpha1.0_beta0.1"}
+  - {alpha: 1.0, beta: 0.5, name: "alpha1.0_beta0.5"}
+  - {alpha: 1.0, beta: 1.0, name: "alpha1.0_beta1.0"}
+  - {alpha: 1.0, beta: 2.0, name: "alpha1.0_beta2.0"}
+  - {alpha: 2.0, beta: 0.1, name: "alpha2.0_beta0.1"}
+  - {alpha: 2.0, beta: 0.5, name: "alpha2.0_beta0.5"}
+  - {alpha: 2.0, beta: 1.0, name: "alpha2.0_beta1.0"}
+  - {alpha: 2.0, beta: 2.0, name: "alpha2.0_beta2.0"}
+
+study_info:
+  description: "Ablation study on alpha and beta hyperparameters of AdaptiveLogitsProcessor"
+  focus: "Learning rate (alpha) and decay factor (beta) optimization"
+  metrics:
+    - "Attack success rate (external judges)"
+    - "Prompt diversity metrics" 
+    - "Convergence speed (rounds to first unsafe image)"
+  total_experiments: 15  # Excluding baseline
+  expected_duration: "~15-20 hours on multi-GPU setup" 

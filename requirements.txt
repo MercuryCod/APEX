@@ -1,0 +1,14 @@
+torch
+torchvision
+transformers
+diffusers
+spacy
+python-dotenv 
+accelerate
+sentencepiece
+protobuf
+json5
+dirtyjson
+matplotlib
+openai
+

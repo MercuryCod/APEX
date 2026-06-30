@@ -1,0 +1,30 @@
+.env
+.DS_Store
+
+output/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+logs/
+
+# Local dev tooling / AI assistant config (not part of the public release)
+.claude/
+.agents/
+CLAUDE.md
+.uv_cache/
+
+# Paper source (kept locally; published version lives on arXiv/proceedings)
+Paper/
